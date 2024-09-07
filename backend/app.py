@@ -1,7 +1,12 @@
 import streamlit as st
 import pandas as pd
+from dotenv import load_dotenv
 
 st.title("Пример приложения")
+
+# Хранение контекста
+
+
 
 st.sidebar.header("Параметры")
 user_name = st.sidebar.text_input("Введите ваше имя:")
