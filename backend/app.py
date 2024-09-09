@@ -16,11 +16,11 @@ def display_messages():
 user_input = st.text_input("Введите ваше сообщение:")
 
 # Обработка отправки сообщения
-if st.button("Отправить"):
+if st.button("Отправить", key="send_button"):
     if user_input:
         st.session_state.messages.append(user_input)
         st.success("Сообщение отправлено!")
-        st.experimental_rerun()  # Перезагрузить приложение для обновления сообщений
+        user_input = ""  # Очистить поле ввода
 
 # Отображение всех сообщений
 display_messages()
