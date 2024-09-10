@@ -2,41 +2,54 @@ import streamlit as st
 import random
 
 # Заголовок приложения
-st.title("Простой чат на Streamlit")
+def display_title():
+    st.title("Простой чат на Streamlit")
 
-# Состояние для хранения сообщений
-if 'messages' not in st.session_state:
-    st.session_state.messages = []
+# Инициализация состояния для хранения сообщений
+def initialize_session_state():
+    if 'messages' not in st.session_state:
+        st.session_state.messages = []
 
 # Предопределенные ответы бота
-bot_responses = [
-    "Привет! Как я могу помочь?",
-    "Интересно, расскажите больше!",
-    "Я здесь, чтобы помочь вам!",
-    "Какой у вас вопрос?",
-    "Спасибо за ваше сообщение!",
-]
+def get_bot_response():
+    bot_responses = [
+        "Привет! Как я могу помочь?",
+        "Интересно, расскажите больше!",
+        "Я здесь, чтобы помочь вам!",
+        "Какой у вас вопрос?",
+        "Спасибо за ваше сообщение!",
+    ]
+    return random.choice(bot_responses)
 
-# Функция для отображения сообщений
+# Отображение всех сообщений
 def display_messages():
     for message in st.session_state.messages:
         st.write(message)
 
-# Поле ввода для сообщения
-user_input = st.text_input("Введите ваше сообщение:")
+# Основная логика приложения
+def main():
+    display_title()
+    initialize_session_state()
 
-# Обработка отправки сообщения
-if st.button("Отправить", key="send_button"):
-    if user_input:
-        # Добавляем сообщение пользователя
-        st.session_state.messages.append(f"Вы: {user_input}")
-        
-        # Генерируем ответ бота
-        bot_reply = random.choice(bot_responses)
-        st.session_state.messages.append(f"Бот: {bot_reply}")
-        
-        st.success("Сообщение отправлено!")
-        user_input = ""  # Очистить поле ввода
+    # Поле ввода для сообщения
+    user_input = st.text_input("Введите ваше сообщение:")
 
-# Отображение всех сообщений
-display_messages()
+    # Обработка отправки сообщения
+    if st.button("Отправить", key="send_button"):
+        if user_input:
+            # Добавляем сообщение пользователя
+            st.session_state.messages.append(f"Вы: {user_input}")
+            
+            # Генерируем ответ бота
+            bot_reply = get_bot_response()
+            st.session_state.messages.append(f"Бот: {bot_reply}")
+            
+            st.success("Сообщение отправлено!")
+            user_input = ""  # Очистить поле ввода
+
+    # Отображение всех сообщений
+    display_messages()
+
+# Запуск приложения
+if __name__ == "__main__":
+    main()
