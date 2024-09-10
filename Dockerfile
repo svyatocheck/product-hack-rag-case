@@ -14,7 +14,16 @@ RUN pip install --upgrade pip
 RUN pip install numpy pandas matplotlib requests beautifulsoup4
 
 # Устанавливаем директорию для работы
-WORKDIR /app
+WORKDIR /app/backend
 
-# Команда для запуска приложения
-CMD ["python", "-m", "http.server", "8000"]
+# Копируем файлы приложения
+COPY . .
+
+# Устанавливаем зависимости из requirements.txt
+RUN pip install -r requirements.txt
+
+# Экспонируем порт, на котором Streamlit слушает
+EXPOSE 8501
+
+# Запускаем Streamlit-приложение
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
