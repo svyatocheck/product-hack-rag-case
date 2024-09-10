@@ -39,10 +39,7 @@ def display_messages():
         st.write(message)
 
 # Основная логика приложения
-def main():
-    display_title()
-    initialize_session_state()
-
+def chat_app():
     # Поле ввода для сообщения
     user_input = st.text_input("Введите ваше сообщение:")
 
@@ -61,6 +58,27 @@ def main():
 
     # Отображение всех сообщений
     display_messages()
+
+# Основная функция
+def main():
+    # Боковая панель
+    st.sidebar.title("Меню")
+    
+    # Вкладки
+    tabs = ["Чат", "Вкладка 2", "Вкладка 3"]
+    selected_tab = st.sidebar.radio("Выберите вкладку", tabs)
+    
+    # Отображение выбранной вкладки
+    if selected_tab == "Чат":
+        display_title()
+        initialize_session_state()
+        chat_app()
+    elif selected_tab == "Вкладка 2":
+        st.title("Вкладка 2")
+        # Добавьте код для второй вкладки
+    elif selected_tab == "Вкладка 3":
+        st.title("Вкладка 3")
+        # Добавьте код для третьей вкладки
 
 # Запуск приложения
 if __name__ == "__main__":
