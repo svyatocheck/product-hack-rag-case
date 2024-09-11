@@ -66,13 +66,6 @@ def chat_app():
     # Использование text_area с состоянием
     user_input = st.text_area("Введите ваше сообщение:", height=150, value=st.session_state.user_input)
 
-    # Кнопка для очистки текстового поля
-    if st.button("Очистить поле ввода"):
-        st.session_state.user_input = ""  # Очищаем состояние, чтобы текстовое поле стало пустым
-
-    # Обновляем значение текстового поля
-    st.session_state.user_input = user_input
-
     if st.button("Отправить"):
         if user_input.strip():
             messages = eval(cookies["messages"])  # Преобразуем строку в список
