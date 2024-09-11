@@ -2,6 +2,7 @@ import streamlit as st
 import random
 from streamlit_cookies_manager import EncryptedCookieManager
 import pandas as pd
+import PyPDF2
 
 # Инициализация менеджера cookies
 cookies = EncryptedCookieManager(prefix="my_app/", password="your_secret_password")
@@ -95,18 +96,33 @@ def load_data():
     text_file = st.file_uploader("Загрузите текстовый документ (txt, pdf)", type=["txt", "pdf"])
     if text_file is not None:
         st.write(f"Загружен файл: {text_file.name}")
+        
         # Чтение содержимого текстового файла
         if text_file.type == "text/plain":
-            content = text_file.read().decode("utf-8")
+            content = text_file.read().decode("utf-8").strip().splitlines()
+            if content:  # Проверка на наличие данных
+                first_line = content[0]
+                last_line = content[-1]
+            else:
+                first_line = "Файл пуст."
+                last_line = ""
         elif text_file.type == "application/pdf":
-            import PyPDF2
             pdf_reader = PyPDF2.PdfReader(text_file)
-            content = ""
+            content = []
             for page in pdf_reader.pages:
-                content += page.extract_text()
-        # Отображение содержимого в сворачиваемом блоке
+                content.append(page.extract_text())
+            content = "\n".join(content).strip().splitlines()
+            if content:  # Проверка на наличие данных
+                first_line = content[0]
+                last_line = content[-1]
+            else:
+                first_line = "Файл пуст."
+                last_line = ""
+
+        # Отображение первой и последней строки в сворачиваемом блоке
         with st.expander("Содержимое файла", expanded=True):
-            st.text_area("Содержимое", content, height=200)
+            st.write("Первая строка:", first_line)
+            st.write("Последняя строка:", last_line)
 
     # Загрузка датасета
     dataset_file = st.file_uploader("Загрузите датасет (csv, xlsx)", type=["csv", "xlsx"])
