@@ -1,5 +1,14 @@
 import streamlit as st
 import random
+from streamlit_cookies_manager import EncryptedCookieManager
+
+# Инициализация менеджера cookies
+# cookie_manager = EncryptedCookieManager(secret="your_secret_key")
+cookies = EncryptedCookieManager(prefix="my_app/")
+# cookie_manager.load()
+
+if not cookies.ready():
+    st.stop()  # Ждем, пока компонент загрузится
 
 # Функция для отображения титульного текста
 def display_header():
@@ -16,9 +25,9 @@ def display_title():
     st.markdown("<h3 style='text-align: center;'>Введите ваш вопрос.</h3>", unsafe_allow_html=True)
 
 # Инициализация состояния для хранения сообщений
-def initialize_session_state():
-    if 'messages' not in st.session_state:
-        st.session_state.messages = []
+def initialize_chat():
+    if "messages" not in cookie_manager:
+        cookie_manager["messages"] = []
 
 # Предопределенные ответы бота
 def get_bot_response():
@@ -45,51 +54,42 @@ def get_bot_response():
 
 # Отображение всех сообщений
 def display_messages():
-    for message in st.session_state.messages:
+    for message in cookie_manager["messages"]:
         st.write(message)
 
 # Основная логика приложения
 def chat_app():
-    # Поле ввода для сообщения
     user_input = st.text_input("Введите ваше сообщение:")
 
-    # Обработка отправки сообщения
-    if st.button("Отправить", key="send_button"):
-        if user_input.strip():  # Проверка на пустое сообщение
+    if st.button("Отправить"):
+        if user_input.strip():
             # Добавляем сообщение пользователя
-            st.session_state.messages.append(f"Вы: {user_input}")
-            
+            cookie_manager["messages"].append(f"Вы: {user_input}")
             # Генерируем ответ бота
             bot_reply = get_bot_response()
-            st.session_state.messages.append(f"Бот: {bot_reply}")
-            
+            cookie_manager["messages"].append(f"Бот: {bot_reply}")
+            cookie_manager.save()  # Сохраняем изменения в cookies
             st.success("Сообщение отправлено!")
         else:
-            st.warning("Введите сообщение перед отправкой.")  # Предупреждение о пустом сообщении
+            st.warning("Введите сообщение перед отправкой.")
 
-    # Кнопка для очистки сообщений
     if st.button("Очистить чат"):
-        st.session_state.messages.clear()
+        cookie_manager["messages"] = []
+        cookie_manager.save()  # Сохраняем изменения в cookies
         st.success("Чат очищен!")
 
-    # Отображение всех сообщений
     display_messages()
 
 # Основная функция
 def main():
-    # Боковая панель
     st.sidebar.title("Меню")
-    
-    # Создание интерактивного меню
     selected_tab = st.sidebar.radio("Выберите вкладку", ["Чат", "Вкладка 2", "Вкладка 3"])
 
-    # Отображение титульного текста
     display_header()
-    
-    # Отображение выбранной вкладки
+
     if selected_tab == "Чат":
         display_title()
-        initialize_session_state()
+        initialize_chat()
         chat_app()
     elif selected_tab == "Вкладка 2":
         st.title("Вкладка 2")
