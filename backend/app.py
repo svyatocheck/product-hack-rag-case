@@ -95,6 +95,18 @@ def load_data():
     text_file = st.file_uploader("Загрузите текстовый документ (txt, pdf)", type=["txt", "pdf"])
     if text_file is not None:
         st.write(f"Загружен файл: {text_file.name}")
+        # Чтение содержимого текстового файла
+        if text_file.type == "text/plain":
+            content = text_file.read().decode("utf-8")
+        elif text_file.type == "application/pdf":
+            import PyPDF2
+            pdf_reader = PyPDF2.PdfReader(text_file)
+            content = ""
+            for page in pdf_reader.pages:
+                content += page.extract_text()
+        # Отображение содержимого в сворачиваемом блоке
+        with st.expander("Содержимое файла", expanded=True):
+            st.text_area("Содержимое", content, height=200)
 
     # Загрузка датасета
     dataset_file = st.file_uploader("Загрузите датасет (csv, xlsx)", type=["csv", "xlsx"])
