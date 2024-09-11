@@ -53,12 +53,13 @@ def get_bot_response():
 # Отображение всех сообщений
 def display_messages():
     messages = eval(cookies["messages"])  # Преобразуем строку в список
-    for message in messages:
+    # for message in messages:
+    for message in reversed(messages):
         st.write(message)
 
 # Основная логика приложения
 def chat_app():
-    user_input = st.text_area("Введите ваше сообщение:", height=150)  # Изменяем на text_area
+    user_input = st.text_area("Введите ваше сообщение:", height=100)  # Изменяем на text_area
 
     if st.button("Отправить"):
         if user_input.strip():
