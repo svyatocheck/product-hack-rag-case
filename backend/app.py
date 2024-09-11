@@ -37,18 +37,6 @@ def get_bot_response():
         "Я здесь, чтобы помочь вам!",
         "Какой у вас вопрос?",
         "Спасибо за ваше сообщение!",
-        "С удовольствием отвечу на ваши вопросы!",
-        "Это звучит интересно!",
-        "Могу предложить несколько идей.",
-        "Какой у вас любимый фильм?",
-        "Давайте обсудим это подробнее.",
-        "Как вы себя чувствуете сегодня?",
-        "Есть ли что-то, что вас беспокоит?",
-        "Я всегда рад помочь!",
-        "Какой ваш любимый вид спорта?",
-        "Что нового в вашей жизни?",
-        "Какой у вас план на сегодня?",
-        "Если у вас есть вопросы, не стесняйтесь задавать!",
     ]
     return random.choice(bot_responses)
 
@@ -99,30 +87,26 @@ def load_data():
         
         # Чтение содержимого текстового файла
         if text_file.type == "text/plain":
-            content = text_file.read().decode("utf-8").strip().splitlines()
-            if content:  # Проверка на наличие данных
-                first_line = content[0]
-                last_line = content[-1]
-            else:
-                first_line = "Файл пуст."
-                last_line = ""
+            content = text_file.read().decode("utf-8").strip()
         elif text_file.type == "application/pdf":
             pdf_reader = PyPDF2.PdfReader(text_file)
-            content = []
+            content = ""
             for page in pdf_reader.pages:
-                content.append(page.extract_text())
-            content = "\n".join(content).strip().splitlines()
-            if content:  # Проверка на наличие данных
-                first_line = content[0]
-                last_line = content[-1]
+                content += page.extract_text() + "\n"
+        
+        # Проверка на наличие данных
+        if content:
+            if len(content) > 200:
+                first_part = content[:99] + "      ...      " + content[-99:]
+                display_content = f"{first_part}"
             else:
-                first_line = "Файл пуст."
-                last_line = ""
+                display_content = content
+        else:
+            display_content = "Файл пуст."
 
-        # Отображение первой и последней строки в сворачиваемом блоке
+        # Отображение содержимого в сворачиваемом блоке
         with st.expander("Содержимое файла", expanded=True):
-            st.write("Первая строка:", first_line)
-            st.write("Последняя строка:", last_line)
+            st.text_area("Содержимое", display_content, height=200)
 
     # Загрузка датасета
     dataset_file = st.file_uploader("Загрузите датасет (csv, xlsx)", type=["csv", "xlsx"])
