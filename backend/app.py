@@ -3,9 +3,7 @@ import random
 from streamlit_cookies_manager import EncryptedCookieManager
 
 # Инициализация менеджера cookies
-# cookie_manager = EncryptedCookieManager(secret="your_secret_key")
-cookies = EncryptedCookieManager(prefix="my_app/")
-# cookie_manager.load()
+cookies = EncryptedCookieManager(prefix="my_app/", password="your_secret_password")
 
 if not cookies.ready():
     st.stop()  # Ждем, пока компонент загрузится
@@ -26,8 +24,8 @@ def display_title():
 
 # Инициализация состояния для хранения сообщений
 def initialize_chat():
-    if "messages" not in cookie_manager:
-        cookie_manager["messages"] = []
+    if "messages" not in cookies:
+        cookies["messages"] = "[]"  # Присваиваем пустой список в виде строки
 
 # Предопределенные ответы бота
 def get_bot_response():
@@ -54,7 +52,8 @@ def get_bot_response():
 
 # Отображение всех сообщений
 def display_messages():
-    for message in cookie_manager["messages"]:
+    messages = eval(cookies["messages"])  # Преобразуем строку в список
+    for message in messages:
         st.write(message)
 
 # Основная логика приложения
@@ -63,19 +62,20 @@ def chat_app():
 
     if st.button("Отправить"):
         if user_input.strip():
-            # Добавляем сообщение пользователя
-            cookie_manager["messages"].append(f"Вы: {user_input}")
-            # Генерируем ответ бота
+            messages = eval(cookies["messages"])  # Преобразуем строку в список
+            messages.append(f"Вы: {user_input}")
+            cookies["messages"] = str(messages)  # Преобразуем список обратно в строку
             bot_reply = get_bot_response()
-            cookie_manager["messages"].append(f"Бот: {bot_reply}")
-            cookie_manager.save()  # Сохраняем изменения в cookies
+            messages.append(f"Бот: {bot_reply}")
+            cookies["messages"] = str(messages)
+            cookies.save()  # Сохраняем изменения в cookies
             st.success("Сообщение отправлено!")
         else:
             st.warning("Введите сообщение перед отправкой.")
 
     if st.button("Очистить чат"):
-        cookie_manager["messages"] = []
-        cookie_manager.save()  # Сохраняем изменения в cookies
+        cookies["messages"] = "[]"  # Присваиваем пустой список в виде строки
+        cookies.save()  # Сохраняем изменения в cookies
         st.success("Чат очищен!")
 
     display_messages()
