@@ -59,7 +59,19 @@ def display_messages():
 
 # Основная логика приложения
 def chat_app():
-    user_input = st.text_area("Введите ваше сообщение:", height=150)  # Изменяем на text_area
+    # Инициализация состояния для текстового поля
+    if 'user_input' not in st.session_state:
+        st.session_state.user_input = ""  # Инициализация состояния для текстового поля
+
+    # Использование text_area с состоянием
+    user_input = st.text_area("Введите ваше сообщение:", height=150, value=st.session_state.user_input)
+
+    # Кнопка для очистки текстового поля
+    if st.button("Очистить поле ввода"):
+        st.session_state.user_input = ""  # Очищаем состояние, чтобы текстовое поле стало пустым
+
+    # Обновляем значение текстового поля
+    st.session_state.user_input = user_input
 
     if st.button("Отправить"):
         if user_input.strip():
@@ -71,6 +83,7 @@ def chat_app():
             cookies["messages"] = str(messages)
             cookies.save()  # Сохраняем изменения в cookies
             st.success("Сообщение отправлено!")
+            st.session_state.user_input = ""  # Очищаем поле ввода после отправки
         else:
             st.warning("Введите сообщение перед отправкой.")
 
