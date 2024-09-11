@@ -1,7 +1,6 @@
 import streamlit as st
 import random
 
-
 # Функция для отображения титульного текста
 def display_header():
     st.markdown(
@@ -14,7 +13,7 @@ def display_header():
 
 # Заголовок приложения
 def display_title():
-    st.markdown("<h3 style='text-align: center;'>Введите ваш вопрос:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Введите ваш вопрос.</h3>", unsafe_allow_html=True)
 
 # Инициализация состояния для хранения сообщений
 def initialize_session_state():
@@ -56,7 +55,7 @@ def chat_app():
 
     # Обработка отправки сообщения
     if st.button("Отправить", key="send_button"):
-        if user_input:
+        if user_input.strip():  # Проверка на пустое сообщение
             # Добавляем сообщение пользователя
             st.session_state.messages.append(f"Вы: {user_input}")
             
@@ -65,7 +64,13 @@ def chat_app():
             st.session_state.messages.append(f"Бот: {bot_reply}")
             
             st.success("Сообщение отправлено!")
-            user_input = ""  # Очистить поле ввода
+        else:
+            st.warning("Введите сообщение перед отправкой.")  # Предупреждение о пустом сообщении
+
+    # Кнопка для очистки сообщений
+    if st.button("Очистить чат"):
+        st.session_state.messages.clear()
+        st.success("Чат очищен!")
 
     # Отображение всех сообщений
     display_messages()
@@ -75,10 +80,15 @@ def main():
     # Боковая панель
     st.sidebar.title("Меню")
     
-    # Вкладки
-    tabs = ["Чат", "Вкладка 2", "Вкладка 3"]
-    selected_tab = st.sidebar.radio("Выберите вкладку", tabs)
-
+    # Создание интерактивного меню
+    if st.sidebar.button("Чат"):
+        selected_tab = "Чат"
+    elif st.sidebar.button("Вкладка 2"):
+        selected_tab = "Вкладка 2"
+    elif st.sidebar.button("Вкладка 3"):
+        selected_tab = "Вкладка 3"
+    else:
+        selected_tab = "Чат"
 
     # Отображение титульного текста
     display_header()
@@ -90,10 +100,10 @@ def main():
         chat_app()
     elif selected_tab == "Вкладка 2":
         st.title("Вкладка 2")
-        # Добавьте код для второй вкладки
+        st.write("Здесь вы можете добавить функционал для второй вкладки.")
     elif selected_tab == "Вкладка 3":
         st.title("Вкладка 3")
-        # Добавьте код для третьей вкладки
+        st.write("Здесь вы можете добавить функционал для третьей вкладки.")
 
 # Запуск приложения
 if __name__ == "__main__":
