@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 from streamlit_cookies_manager import EncryptedCookieManager
+import pandas as pd
 
 # Инициализация менеджера cookies
 cookies = EncryptedCookieManager(prefix="my_app/", password="your_secret_password")
@@ -53,13 +54,12 @@ def get_bot_response():
 # Отображение всех сообщений
 def display_messages():
     messages = eval(cookies["messages"])  # Преобразуем строку в список
-    # for message in messages:
-    for message in reversed(messages):
+    for message in reversed(messages):  # Изменяем порядок на обратный
         st.write(message)
 
 # Основная логика приложения
 def chat_app():
-    user_input = st.text_area("Введите ваше сообщение:", height=100)  # Изменяем на text_area
+    user_input = st.text_area("Введите ваше сообщение:", height=150)  # Изменяем на text_area
 
     if st.button("Отправить"):
         if user_input.strip():
@@ -81,10 +81,29 @@ def chat_app():
 
     display_messages()
 
+# Загрузка данных
+def load_data():
+    st.title("Загрузка данных")
+
+    # Загрузка текстового документа
+    text_file = st.file_uploader("Загрузите текстовый документ (txt, pdf)", type=["txt", "pdf"])
+    if text_file is not None:
+        st.write(f"Загружен файл: {text_file.name}")
+
+    # Загрузка датасета
+    dataset_file = st.file_uploader("Загрузите датасет (csv, xlsx)", type=["csv", "xlsx"])
+    if dataset_file is not None:
+        if dataset_file.type == "text/csv":
+            data = pd.read_csv(dataset_file)
+        else:
+            data = pd.read_excel(dataset_file)
+        st.write(f"Загружен датасет: {dataset_file.name}")
+        st.dataframe(data)
+
 # Основная функция
 def main():
     st.sidebar.title("Меню")
-    selected_tab = st.sidebar.radio("Выберите вкладку", ["Чат", "Вкладка 2", "Вкладка 3"])
+    selected_tab = st.sidebar.radio("Выберите вкладку", ["Загрузка данных", "Чат", "Вкладка 3"])
 
     display_header()
 
@@ -92,9 +111,8 @@ def main():
         display_title()
         initialize_chat()
         chat_app()
-    elif selected_tab == "Вкладка 2":
-        st.title("Вкладка 2")
-        st.write("Здесь вы можете добавить функционал для второй вкладки.")
+    elif selected_tab == "Загрузка данных":
+        load_data()
     elif selected_tab == "Вкладка 3":
         st.title("Вкладка 3")
         st.write("Здесь вы можете добавить функционал для третьей вкладки.")
