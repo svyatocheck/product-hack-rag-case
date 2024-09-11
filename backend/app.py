@@ -81,14 +81,7 @@ def main():
     st.sidebar.title("Меню")
     
     # Создание интерактивного меню
-    if st.sidebar.button("Чат"):
-        selected_tab = "Чат"
-    elif st.sidebar.button("Вкладка 2"):
-        selected_tab = "Вкладка 2"
-    elif st.sidebar.button("Вкладка 3"):
-        selected_tab = "Вкладка 3"
-    else:
-        selected_tab = "Чат"
+    selected_tab = st.sidebar.radio("Выберите вкладку", ["Чат", "Вкладка 2", "Вкладка 3"])
 
     # Отображение титульного текста
     display_header()
