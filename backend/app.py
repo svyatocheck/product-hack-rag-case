@@ -14,7 +14,7 @@ def display_header():
 
 # Заголовок приложения
 def display_title():
-    st.title("Введите ваш вопрос.")
+    st.markdown("<h3 style='text-align: center;'>Введите ваш вопрос:</h3>", unsafe_allow_html=True)
 
 # Инициализация состояния для хранения сообщений
 def initialize_session_state():
