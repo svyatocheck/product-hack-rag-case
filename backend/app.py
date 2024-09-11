@@ -1,9 +1,20 @@
 import streamlit as st
 import random
 
+
+# Функция для отображения титульного текста
+def display_header():
+    st.markdown(
+        """
+        <h2 style='text-align: center;'>Кейс №9</h2>
+        <p style='text-align: center; font-size: 30px;'>Экосистема знаний нормативных актов.</p>
+        """,
+        unsafe_allow_html=True
+    )
+
 # Заголовок приложения
 def display_title():
-    st.title("Простой чат на Streamlit")
+    st.title("Введите ваш вопрос.")
 
 # Инициализация состояния для хранения сообщений
 def initialize_session_state():
@@ -67,6 +78,10 @@ def main():
     # Вкладки
     tabs = ["Чат", "Вкладка 2", "Вкладка 3"]
     selected_tab = st.sidebar.radio("Выберите вкладку", tabs)
+
+
+    # Отображение титульного текста
+    display_header()
     
     # Отображение выбранной вкладки
     if selected_tab == "Чат":
