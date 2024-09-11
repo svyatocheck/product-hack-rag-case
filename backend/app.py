@@ -96,8 +96,8 @@ def load_data():
         
         # Проверка на наличие данных
         if content:
-            if len(content) > 200:
-                first_part = content[:99] + "      ...      " + content[-99:]
+            if len(content) > 1000:
+                first_part = content[:495] + "\n\n    ...    \n \n" + content[-495:]
                 display_content = f"{first_part}"
             else:
                 display_content = content
