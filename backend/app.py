@@ -58,7 +58,7 @@ def display_messages():
 
 # Основная логика приложения
 def chat_app():
-    user_input = st.text_input("Введите ваше сообщение:")
+    user_input = st.text_area("Введите ваше сообщение:", height=150)  # Изменяем на text_area
 
     if st.button("Отправить"):
         if user_input.strip():
