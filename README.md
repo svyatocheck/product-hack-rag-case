@@ -107,9 +107,9 @@ Backend реализован на Python с использованием FastAPI
 
 Для реализации сценария будут использоваться сервисы Yandex Cloud.
 
-[YandexGPT](https://yandex.cloud/ru/docs/foundation-models/concepts/yandexgpt/) - большая языковая модель для построения embedding-ов по документам и ответов на вопросы.
-[Yandex Object Storage](https://yandex.cloud/ru/docs/storage/) - Объектное хранилище, в котором изначально хранятся файлы с базой знаний.
-[Yandex DataSphere](https://yandex.cloud/ru/docs/datasphere/) - Cервис для обучения ML-моделей и среда разработки на Python для взаимодействия с YandexGPT и OpenSearch.
+- [YandexGPT](https://yandex.cloud/ru/docs/foundation-models/concepts/yandexgpt/) - большая языковая модель для построения embedding-ов по документам и ответов на вопросы.
+- [Yandex Object Storage](https://yandex.cloud/ru/docs/storage/) - Объектное хранилище, в котором изначально хранятся файлы с базой знаний.
+- [Yandex DataSphere](https://yandex.cloud/ru/docs/datasphere/) - Cервис для обучения ML-моделей и среда разработки на Python для взаимодействия с YandexGPT и OpenSearch.
 
 Работа с векторной БД и языковой моделью YandexGPT будет осуществляться с помощью популярного фреймворка с открытым исходным кодом [LangChain](https://www.langchain.com/).
 
@@ -123,5 +123,5 @@ Backend реализован на Python с использованием FastAPI
 
 - [RAGAS](https://docs.ragas.io/en/latest/concepts/metrics/context_utilization.html)
 - [Self-RAG](https://arxiv.org/abs/2310.11511)
-- [Обзор и адаптация средств оценки RAG-систем под русский язык](ttps://youtu.be/VcOLsc1MUTY?t=768)
+- [Обзор и адаптация средств оценки RAG-систем под русский язык](ttps://youtube/VcOLsc1MUTY?t=768)
 - [USER](https://huggingface.co/deepvk/USER-bge-m3)
