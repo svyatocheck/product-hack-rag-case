@@ -32,11 +32,7 @@ def initialize_chat():
 # Предопределенные ответы бота
 def get_bot_response():
     bot_responses = [
-        "Привет! Как я могу помочь?",
-        "Интересно, расскажите больше!",
-        "Я здесь, чтобы помочь вам!",
-        "Какой у вас вопрос?",
-        "Спасибо за ваше сообщение!",
+        "Ответ сервиса",
     ]
     return random.choice(bot_responses)
 
@@ -121,7 +117,7 @@ def load_data():
 # Основная функция
 def main():
     st.sidebar.title("Меню")
-    selected_tab = st.sidebar.radio("Выберите вкладку", ["Загрузка данных", "Чат", "Вкладка 3"])
+    selected_tab = st.sidebar.radio("Выберите вкладку", ["Загрузка данных", "Чат"])
 
     display_header()
 
@@ -131,9 +127,6 @@ def main():
         chat_app()
     elif selected_tab == "Загрузка данных":
         load_data()
-    elif selected_tab == "Вкладка 3":
-        st.title("Вкладка 3")
-        st.write("Здесь вы можете добавить функционал для третьей вкладки.")
 
 # Запуск приложения
 if __name__ == "__main__":
