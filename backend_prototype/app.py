@@ -3,12 +3,16 @@ import random
 from streamlit_cookies_manager import EncryptedCookieManager
 import pandas as pd
 import PyPDF2
+import requests
+
 
 # Инициализация менеджера cookies
 cookies = EncryptedCookieManager(prefix="my_app/", password="your_secret_password")
 
+
 if not cookies.ready():
     st.stop()  # Ждем, пока компонент загрузится
+
 
 # Функция для отображения титульного текста
 def display_header():
@@ -24,23 +28,32 @@ def display_header():
 def display_title():
     st.markdown("<h3 style='text-align: center;'>Введите ваш вопрос.</h3>", unsafe_allow_html=True)
 
+
 # Инициализация состояния для хранения сообщений
 def initialize_chat():
     if "messages" not in cookies:
         cookies["messages"] = "[]"  # Присваиваем пустой список в виде строки
 
+
 # Предопределенные ответы бота
-def get_bot_response():
-    bot_responses = [
-        "Ответ сервиса",
-    ]
-    return random.choice(bot_responses)
+def get_bot_response(question : str):
+    url = "http://fastapi:8000/rag/query"
+    query_data = {"query": question}
+
+    response = requests.post(url, json=query_data)
+
+    if response.status_code == 200:
+        return f"Response from RAG: {response.json()}"
+    else:
+        return f"Failed to get response. Status code: {response.status_code}"
+
 
 # Отображение всех сообщений
 def display_messages():
     messages = eval(cookies["messages"])  # Преобразуем строку в список
     for message in reversed(messages):  # Изменяем порядок на обратный
         st.write(message)
+
 
 # Основная логика приложения
 def chat_app():
@@ -56,7 +69,7 @@ def chat_app():
             messages = eval(cookies["messages"])  # Преобразуем строку в список
             messages.append(f"Вы: {user_input}")
             cookies["messages"] = str(messages)  # Преобразуем список обратно в строку
-            bot_reply = get_bot_response()
+            bot_reply = get_bot_response(st.session_state.user_input)
             messages.append(f"Бот: {bot_reply}")
             cookies["messages"] = str(messages)
             cookies.save()  # Сохраняем изменения в cookies
@@ -71,6 +84,7 @@ def chat_app():
         st.success("Чат очищен!")
 
     display_messages()
+
 
 # Загрузка данных
 def load_data():
@@ -114,6 +128,7 @@ def load_data():
         st.write(f"Загружен датасет: {dataset_file.name}")
         st.dataframe(data)
 
+
 # Основная функция
 def main():
     st.sidebar.title("Меню")
@@ -127,6 +142,7 @@ def main():
         chat_app()
     elif selected_tab == "Загрузка данных":
         load_data()
+
 
 # Запуск приложения
 if __name__ == "__main__":
