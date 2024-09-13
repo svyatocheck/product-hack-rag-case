@@ -139,3 +139,6 @@ backup.dump.gz
 .vscode
 
 npa_dataset_v3.db
+
+hello.py
+hello_api.py
