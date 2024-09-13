@@ -45,7 +45,7 @@ def get_bot_response(question : str):
     response = requests.post(url, json=payload)
 
     if response.status_code == 200:
-        return response.json()
+        return response.json()["answer"]
     else:
         result = f"Error: {response.status_code}, {response.text}"
         return result
@@ -72,7 +72,7 @@ def chat_app():
             messages = eval(cookies["messages"])  # Преобразуем строку в список
             messages.append(f"Вы: {user_input}")
             cookies["messages"] = str(messages)  # Преобразуем список обратно в строку
-            bot_reply = get_bot_response(st.session_state.user_input)
+            bot_reply = get_bot_response(user_input)
             messages.append(f"Бот: {bot_reply}")
             cookies["messages"] = str(messages)
             cookies.save()  # Сохраняем изменения в cookies
