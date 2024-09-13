@@ -126,7 +126,7 @@ class SelfReflectiveRag:
     def _get_retriever(self, model_name="deepvk/USER-bge-m3", collection_name="npa_storage_512_64"):
         # Retriever
         model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
-        model_kwargs = {'device': 'cuda'}
+        model_kwargs = {'device': 'cpu'}
         self.embeddings = HuggingFaceEmbeddings(
             model_name=model_name,
             model_kwargs=model_kwargs,

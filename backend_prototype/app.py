@@ -38,22 +38,17 @@ def initialize_chat():
 # Предопределенные ответы бота
 def get_bot_response(question : str):
     url = "http://fastapi:8000/rag/query"
-
-    # Create the payload with the query
+    
     payload = {
-        "query": "Ваш запрос здесь"
+        "query": question
     }
-
-    # Send the POST request
     response = requests.post(url, json=payload)
 
-    # Check the response status code
     if response.status_code == 200:
-        # If the request was successful, print the response data
-        print("Response:", response.json())
+        return response.json()
     else:
-        # If there was an error, print the status code and error message
-        print("Error:", response.status_code, response.text)
+        result = f"Error: {response.status_code}, {response.text}"
+        return result
 
 
 # Отображение всех сообщений

@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic.v1 import BaseModel, Field
 from typing import List, Dict
 from self_rag_backend.self_rag_logic import *
+from keys import *
 import time
 import jwt
 import requests
@@ -25,17 +26,9 @@ class YandexGPTCredentials(BaseModel):
     folder_id: str
 
 
-def get_iam_token(service_account_id, private_key, key_id):
-    now = int(time.time())
-    payload = {
-        "aud": "https://iam.api.cloud.yandex.net/iam/v1/tokens",
-        "iss": service_account_id,
-        "iat": now,
-        "exp": now + 3600,
-    }
-    encoded_token = jwt.encode(
-        payload, private_key, algorithm="PS256", headers={"kid": key_id}
-    )
+def get_iam_token():
+    with open("/app/jwt_token.txt", "r") as j:
+        encoded_token = j.read()
 
     response = requests.post(
         "https://iam.api.cloud.yandex.net/iam/v1/tokens",
@@ -47,14 +40,6 @@ def get_iam_token(service_account_id, private_key, key_id):
 
 
 def yandex_logic():
-    # set keys here
-    service_account_id = ""
-    key_id = ""
-    private_key = """
-    
-    -----END PRIVATE KEY-----
-    """
-    # Получаем IAM-токен
     now = int(time.time())
     payload = {
         "aud": "https://iam.api.cloud.yandex.net/iam/v1/tokens",
@@ -69,10 +54,9 @@ def yandex_logic():
     )
 
     # Запись ключа в файл
-    with open("jwt_token.txt", "w") as j:
+    with open("/app/jwt_token.txt", "w") as j:
         j.write(encoded_token)
 
-    # Получаем IAM-токен
     credentials_store["token"] = get_iam_token()
 
 
@@ -88,14 +72,13 @@ async def rag_generate_answer(query: str) -> dict:
             db_path = database_path, db_name = filename, gpt_folder_id = credentials_store["folder_id"], iam_token = credentials_store["token"]
         )
         questions = [query]
-        print(query)
         value = reflective_rag.run_rag(questions)
         
         answer = value['generation']
         contexts = [texts.page_content for texts in value["documents"]]
         return {"answer":answer, "contexts":contexts}
     except Exception as ex:
-        return {"answer":"Ошибка", "contexts":"None"}
+        return {"answer":str(ex), "contexts":"None"}
 
 
 # Endpoint 1: Handle RAG queries with timeout
