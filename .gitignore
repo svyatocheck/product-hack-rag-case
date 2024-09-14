@@ -142,4 +142,6 @@ npa_dataset_v3.db
 
 hello.py
 hello_api.py
-self_rag_backend/keys.py
+docker/rag_backend/keys.py
+
+v2_ragas_npa_dataset_firstPart.xlsx

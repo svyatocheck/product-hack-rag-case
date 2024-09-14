@@ -58,7 +58,7 @@
 
 #### Naive RAG vs. SELF- RAG
 
-![](https://github.com/svyatocheck/product-hack-rag-case/blob/_dev_natalia/self%20rag.jpg?raw=true)
+![](readme/self%20rag.jpg)
 
 Классический Naive RAG - революционное для своего времени решение, однако и оно имеет весомые недостатки:
 
@@ -99,6 +99,13 @@ Backend реализован на Python с использованием FastAPI
 - **Хранилища данных**. Векторные базы данных (Milvus)
 - **Веб-фреймворк**. FastAPI, Streamlit
 
+### Описание репозитория
+
+- `data/` - данные, на которых раг работает.
+- `docker/` - Frontend/Backend сервисы с Docker файлами, `docker-compose.yml
+- `experiments/` - Jupyter ноутбуки с реализациями экспериментов и идей для хакатона
+- `readme/` - директория для хранения доп. материалов этого Readme файла.
+
 ### Сборка и запуск приложения
 
 Для реализации сценария будут использоваться сервисы Yandex Cloud.
@@ -112,9 +119,12 @@ Backend реализован на Python с использованием FastAPI
 Существует 2 способа общения с чат-ботом:
 
 - Пользовательский интерфейс чат-бота, написанный на Streamlit. На момент написания необходимо разворачивать тяжелый докер под него. 
-docker compose -f docker-compose.yml up --build. Интерфейс станет доступен по [ссылке](http://localhost:8501)
 
-![](https://github.com/svyatocheck/product-hack-rag-case/blob/_dev_natalia/front.jpg?raw=true)
+`docker compose -f docker-compose.yml up --build` (из `docker/` директории)
+
+Интерфейс станет доступен по [ссылке](http://localhost:8501).
+
+![](readme/front.jpg)
 
 - API к чат-боту, написанное на FastAPI. Для использования API необходимо сделать запрос. Пример запроса через request:
 

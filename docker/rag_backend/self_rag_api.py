@@ -2,8 +2,8 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from pydantic.v1 import BaseModel, Field
 from typing import List, Dict
-from self_rag_backend.self_rag_logic import *
-from self_rag_backend.keys import *
+from rag_backend.self_rag_logic import *
+from rag_backend.keys import *
 import time
 import jwt
 import requests
